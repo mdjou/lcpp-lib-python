@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "lcpp-lib"
+dynamic = ["version"]
+description = "llama.cpp libraries repackaged as a python wheel"
+readme = "README.md"
+authors = [{ name = "Mykola Dzhus" }]
+requires-python = ">=3.8"
+license = { file = "LICENSE.md" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Operating System :: POSIX :: Linux",
+    "Topic :: Software Development :: Libraries",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = []
+
+[tool.hatch.build.targets.wheel]
+artifacts = [
+    "src/lcpp_lib/linux-vulkan-x64/*.so*",
+    "src/lcpp_lib/windows-vulkan-x64/*.dll*",
+]
+packages = ["src/lcpp_lib"]
+reproducible = false
+
+[tool.hatch.build.targets.wheel.sources]
+"src" = ""
+
+[tool.hatch.version]
+path = "src/lcpp_lib/__version__.py"
+
+[dependency-groups]
+dev = [
+    "auditwheel>=6.1.0",
+]
+
+[tool.hatch.build.targets.wheel.hooks.custom]
+path = "hatch_build.py"
