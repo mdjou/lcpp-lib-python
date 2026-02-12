@@ -11,3 +11,4 @@ wheels/
 
 downloads
 src/lcpp_lib/linux-vulkan-x64
+uv.lock
