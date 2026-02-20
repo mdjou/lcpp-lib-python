@@ -43,8 +43,8 @@ jobs:
       - name: Commit and Push changes
         if: steps.check.outputs.updated == 'true'
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.email "165793994+mdjou@users.noreply.github.com"
+          git config --local user.name "Mykola Dzhus"
           git add src/lcpp_lib/__version__.py
           git commit -m "update version to ${{ steps.check.outputs.version }}"
           git push
