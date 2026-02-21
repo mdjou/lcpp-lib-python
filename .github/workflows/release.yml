@@ -55,7 +55,7 @@ jobs:
         with:
           tag_name: "v${{ steps.check.outputs.version }}"
           name: "Release ${{ steps.check.outputs.version }}"
-          body: "Python package of llama.cpp libraries for version ${{ steps.check.outputs.tag }}"
+          body: "Wheel package of llama.cpp version [${{ steps.check.outputs.tag }}](https://github.com/ggml-org/llama.cpp/releases/tag/${{ steps.check.outputs.tag }})"
           files: wheels/*.whl
           draft: false
           prerelease: false
