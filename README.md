@@ -20,6 +20,9 @@ lcpp_lib_path = lcpp_lib.get_lib_path()
 ```
 
 
-## Supported platforms
+## Platforms
 
 - Linux x64 (Vulkan)
+- Windows x64 (Vulkan)
+- macOS arm64
+

@@ -10,5 +10,5 @@ wheels/
 .venv
 
 downloads
-src/lcpp_lib/linux-vulkan-x64
+src/lcpp_lib/native_libs
 uv.lock

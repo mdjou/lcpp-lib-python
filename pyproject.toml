@@ -29,8 +29,8 @@ dependencies = []
 
 [tool.hatch.build.targets.wheel]
 artifacts = [
-    "src/lcpp_lib/linux-vulkan-x64/*.so*",
-    "src/lcpp_lib/windows-vulkan-x64/*.dll*",
+    "src/lcpp_lib/native_libs/*.{dylib,dll,so}*",
+    "src/lcpp_lib/native_libs/LICENSE*",
 ]
 packages = ["src/lcpp_lib"]
 reproducible = false

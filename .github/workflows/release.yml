@@ -38,7 +38,13 @@ jobs:
         run: |
           uv sync --dev
           chmod +x buildscripts/*.sh
-          ./buildscripts/full_update_linux_x64.sh
+          python3 buildscripts/update_project_version.py --tag ${{ steps.check.outputs.tag }}
+          python3 buildscripts/download.py --build ubuntu-x64-vulkan
+          ./buildscripts/extract_and_build_linux_x64.sh
+          python3 buildscripts/download.py --build win-x64-vulkan
+          ./buildscripts/extract_and_build_windows_x64.sh
+          python3 buildscripts/download.py --build macos-arm64
+          ./buildscripts/extract_and_build_macos_arm64.sh
 
       - name: Commit and Push changes
         if: steps.check.outputs.updated == 'true'
@@ -55,7 +61,7 @@ jobs:
         with:
           tag_name: "v${{ steps.check.outputs.version }}"
           name: "Release ${{ steps.check.outputs.version }}"
-          body: "Wheel package of llama.cpp version [${{ steps.check.outputs.tag }}](https://github.com/ggml-org/llama.cpp/releases/tag/${{ steps.check.outputs.tag }})"
+          body: "Wheels of llama.cpp version [${{ steps.check.outputs.tag }}](https://github.com/ggml-org/llama.cpp/releases/tag/${{ steps.check.outputs.tag }})"
           files: wheels/*.whl
           draft: false
           prerelease: false
