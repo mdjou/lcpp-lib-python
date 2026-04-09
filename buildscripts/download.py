@@ -81,21 +81,11 @@ def main():
         name = asset["name"]
         lower_name = name.lower()
         if args.build == BUILD_UBUNTU_X64_VULKAN:
-            if (
-                "ubuntu" in lower_name
-                and "vulkan" in lower_name
-                and "x64" in lower_name
-                and lower_name.endswith(".tar.gz")
-            ):
+            if lower_name.endswith("-bin-ubuntu-vulkan-x64.tar.gz"):
                 target_asset = asset
                 break
         elif args.build == BUILD_WIN_X64_VULKAN:
-            if (
-                "win" in lower_name
-                and "vulkan" in lower_name
-                and "x64" in lower_name
-                and lower_name.endswith(".zip")
-            ):
+            if lower_name.endswith("-bin-win-vulkan-x64.zip"):
                 target_asset = asset
                 break
         elif args.build == BUILD_WIN_X64_CUDA_12:
@@ -139,11 +129,7 @@ def main():
                 target_asset = asset
                 break
         elif args.build == BUILD_MACOS_ARM64:
-            if (
-                "macos" in lower_name
-                and "arm64" in lower_name
-                and lower_name.endswith(".tar.gz")
-            ):
+            if lower_name.endswith("-bin-macos-arm64.tar.gz"):
                 target_asset = asset
                 break
 
