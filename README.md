@@ -2,7 +2,7 @@
 
 Repackage of [Llama.cpp](https://github.com/ggml-org/llama.cpp) libraries for python ecosystem.
 
-There are no python bindings, no API, no extra abstractions in this package - only the compiled libraries.
+This package contains no python bindings, no API, and no extra abstractions. Only the compiled libraries.
 
 
 ## Usage
