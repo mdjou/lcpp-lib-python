@@ -20,7 +20,7 @@ DEST_DIR = "src/lcpp_lib/native_libs"
 
 
 def get_version():
-    ver_file = "downloads/ver.txt"
+    ver_file = "downloads/nightly-tag.txt"
     if os.path.exists(ver_file):
         with open(ver_file, "r") as f:
             return f.read().strip()
@@ -58,7 +58,7 @@ def main():
 
     version = args.version or get_version()
     if not version:
-        print("Error: Version not specified and downloads/ver.txt not found.")
+        print("Error: Version not specified and downloads/nightly-tag.txt not found.")
         exit(1)
 
     # Find the archive in downloads/
@@ -150,7 +150,7 @@ def main():
 
             if should_move:
                 dest_path = os.path.join(dest, item)
-                
+
                 if not os.path.exists(dest_path):
                     shutil.move(src_path, dest_path)
                     files_moved += 1

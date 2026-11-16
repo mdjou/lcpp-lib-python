@@ -18,34 +18,41 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
 
       - name: Check for new version
         id: check
-        run: python buildscripts/ci/get_version_status.py
+        run: |
+          python buildscripts/get_download_tag.py --save
+          python buildscripts/ci/get_version_status.py
 
       - name: Install uv
         if: steps.check.outputs.updated == 'true'
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@v10.3.3
 
       - name: Execute build sequence
         if: steps.check.outputs.updated == 'true'
         run: |
           uv sync --dev
           chmod +x buildscripts/*.sh
-          python3 buildscripts/get_download_tag.py --save --tag ${{ steps.check.outputs.tag }}
-          python3 buildscripts/update_project_version.py --tag ${{ steps.check.outputs.tag }}
-          python3 buildscripts/download.py --build ubuntu-x64-vulkan
+          python3 buildscripts/update_project_version.py --tag ${{ steps.check.outputs.nightlytag }}
+          python3 buildscripts/download.py --build ubuntu-x64-vulkan --tag ${{ steps.check.outputs.nightlytag }}
           ./buildscripts/extract_and_build_linux_x64.sh
-          python3 buildscripts/download.py --build win-x64-vulkan
+          rm -rf src/lcpp_lib/native_libs
+          rm -f downloads/llama-*
+          python3 buildscripts/download.py --build win-x64-vulkan --tag ${{ steps.check.outputs.nightlytag }}
           ./buildscripts/extract_and_build_windows_x64.sh
-          python3 buildscripts/download.py --build macos-arm64
+          rm -rf src/lcpp_lib/native_libs
+          rm -f downloads/llama-*
+          python3 buildscripts/download.py --build macos-arm64 --tag ${{ steps.check.outputs.nightlytag }}
           ./buildscripts/extract_and_build_macos_arm64.sh
+          rm -rf src/lcpp_lib/native_libs
+          rm -f downloads/llama-*
 
       - name: Commit and Push changes
         if: steps.check.outputs.updated == 'true'
@@ -58,11 +65,11 @@ jobs:
 
       - name: Create GitHub Release
         if: steps.check.outputs.updated == 'true'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: "v${{ steps.check.outputs.version }}"
           name: "Release ${{ steps.check.outputs.version }}"
-          body: "Wheels of llama.cpp version [${{ steps.check.outputs.tag }}](https://github.com/ggml-org/llama.cpp/releases/tag/${{ steps.check.outputs.tag }})"
+          body: "Wheels of llama.cpp version [${{ steps.check.outputs.nightlytag }}](https://github.com/ggml-org/llama.cpp/releases/tag/${{ steps.check.outputs.nightlytag }})"
           files: wheels/*.whl
           draft: false
           prerelease: false

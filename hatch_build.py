@@ -14,6 +14,7 @@ class CustomBuildHook(BuildHookInterface):
             build_data["tag"] = f"py3-none-{plat}"
         if os.path.exists("src/lcpp_lib/native_libs/libllama.so"):
             # linux naming will be further fixed by auditwheel as a post-build step
+            # (see buildscripts/extract_and_build_linux_x64.sh)
             plat = f"linux_x86_64"
             build_data["tag"] = f"py3-none-{plat}"
 

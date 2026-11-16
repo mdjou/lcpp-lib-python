@@ -5,7 +5,7 @@ import urllib.request
 
 REPO = "ggml-org/llama.cpp"
 DOWNLOAD_DIR = "downloads"
-VERSION_FILE = os.path.join(DOWNLOAD_DIR, "ver.txt")
+NIGHTLY_FILE = os.path.join(DOWNLOAD_DIR, "nightly-tag.txt")
 
 BUILD_UBUNTU_X64_VULKAN = "ubuntu-x64-vulkan"
 BUILD_WIN_X64_VULKAN = "win-x64-vulkan"
@@ -43,8 +43,8 @@ def download_file(url, dest):
 
 
 def get_saved_version():
-    if os.path.exists(VERSION_FILE):
-        with open(VERSION_FILE, "r") as f:
+    if os.path.exists(NIGHTLY_FILE):
+        with open(NIGHTLY_FILE, "r") as f:
             return f.read().strip()
     return None
 
@@ -52,8 +52,8 @@ def get_saved_version():
 def main():
     parser = argparse.ArgumentParser(description="Download llama.cpp release")
     parser.add_argument(
-        "--version",
-        help="Version tag (e.g. b7903). If not provided, reads from downloads/ver.txt",
+        "--tag",
+        help="Nightly tag (e.g. b7903). If not provided, reads from downloads/nightly-tag.txt",
     )
     parser.add_argument(
         "--build",
@@ -63,16 +63,16 @@ def main():
     )
     args = parser.parse_args()
 
-    version = args.version or get_saved_version()
-    if not version:
+    tag = args.tag or get_saved_version()
+    if not tag:
         print(
-            f"Error: Version not specified and {VERSION_FILE} not found. Run fetch_latest_version.py first."
+            f"Error: Tag not specified and {NIGHTLY_FILE} not found. Run get_download_tag.py first."
         )
         exit(1)
 
-    release = get_release_by_tag(version)
+    release = get_release_by_tag(tag)
     if not release:
-        print(f"Could not find release for tag: {version}")
+        print(f"Could not find release for tag: {tag}")
         exit(1)
 
     assets = release.get("assets", [])
@@ -145,7 +145,7 @@ def main():
         print(f"Successfully downloaded {filename}")
     else:
         print(
-            f"Could not find a matching release asset for version {version} and build {args.build}."
+            f"Could not find a matching release asset for tag {tag} and build {args.build}."
         )
         exit(1)
 
