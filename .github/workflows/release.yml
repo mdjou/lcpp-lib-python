@@ -1,8 +1,8 @@
 name: Build and Release
 
 on:
-  # schedule:
-  #   - cron: '0 4 * * *'
+  schedule:
+    - cron: '0 4 * * *'
   repository_dispatch:
     types: [release]
   workflow_dispatch:
@@ -60,7 +60,7 @@ jobs:
           git config --local user.email "165793994+mdjou@users.noreply.github.com"
           git config --local user.name "Mykola Dzhus"
           git add src/lcpp_lib/__version__.py
-          git commit -m "update version to ${{ steps.check.outputs.version }}"
+          git commit -m "update version to v${{ steps.check.outputs.version }}-${{ steps.check.outputs.nightlytag }}"
           git push
 
       - name: Create GitHub Release
@@ -69,7 +69,7 @@ jobs:
         with:
           tag_name: "v${{ steps.check.outputs.version }}"
           name: "Release ${{ steps.check.outputs.version }}"
-          body: "Wheels of llama.cpp version [${{ steps.check.outputs.nightlytag }}](https://github.com/ggml-org/llama.cpp/releases/tag/${{ steps.check.outputs.nightlytag }})"
+          body: "Wheels of llama.cpp version v${{ steps.check.outputs.version }}-[${{ steps.check.outputs.nightlytag }}](https://github.com/ggml-org/llama.cpp/releases/tag/${{ steps.check.outputs.nightlytag }})"
           files: wheels/*.whl
           draft: false
           prerelease: false
